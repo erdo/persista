@@ -30,7 +30,7 @@ It's currently being used in a clean architecture sample to persist app state in
 Copy the PerSista.kt class into your own app, or add this gradle line to your project (you'll also need mavenCentral() in your list of maven repos)
 
 ```
-implementation "co.early.persista:persista:0.1.1"
+implementation("co.early.persista:persista:0.1.1")
 ```
 
 
