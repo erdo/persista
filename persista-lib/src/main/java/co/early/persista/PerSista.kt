@@ -42,6 +42,13 @@ class PerSista(
         }
     }
 
+    fun wipeEverything(complete: () -> Unit) {
+        CoroutineScope(mainDispatcher).launch {
+            wipeEverything()
+            complete()
+        }
+    }
+
     suspend inline fun <reified T : Any> write(item: T) {
         val klass = T::class
         val qualifiedName = getQualifiedName(klass, strictMode, logger)?: return
