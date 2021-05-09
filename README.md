@@ -40,7 +40,6 @@ Construct PerSista with the folder you want your data saved to, for an android a
 
 ```
 val perSista = PerSista(application.filesDir)
-
 ```
 
 Define your data class, mark it serializable (also don't forget to add the kotlin serialization plugin to gradle)
