@@ -27,9 +27,11 @@ It's currently being used in a clean architecture sample to persist app state in
 
 ## How to get it
 
-Copy the PerSista.kt class into your own app, ~~or add this gradle line to your project (you'll also need mavenCentral() in your list of maven repos)~~ (currently requesting a new repo at maven central...)
+Copy the PerSista.kt class into your own app, or add this gradle line to your project (you'll also need mavenCentral() in your list of maven repos)
 
-~~implementation "co.early.persista:persista:0.1.1"~~
+```
+implementation "co.early.persista:persista:0.1.1"
+```
 
 
 ## How to use it
@@ -114,7 +116,7 @@ PerSista has no concept of data class versioning, so if you change the definitio
 The state of your data class will be saved in a file named after the data class's qualified name e.g. "foo.bar.app.DashboardState". If that data class gets obfuscated however, the qualified name could easily be renamed to something like "a.b.c.a". If you release a new version of the app, this time the qualified name could be renamed to "b.c.d.d" and PerSista won't be able to find the data from your previous installation. Check the example app's proguard configuration for details.
 
 ## Permissions
-None required on Android, as long as you stick to the internal app directory `Application.getFilesDir()`
+None required on Android, as long as you stick to the internal app directory: `Application.getFilesDir()`
 
 ## Example App
 
@@ -123,7 +125,7 @@ None required on Android, as long as you stick to the internal app directory `Ap
 There is a complete mini example android app in this repo if you need something to copy-paste to get started.
 
 ## Anything else
-The non-suspend APIs invoke a functional parameter when they are complete, if you are using PerSista on Android this will arrive on the main thread. For non UI kotlin platforms (which don't have a Dispatchers.Main) you should overide the mainDispatcher parameter in the constructor to an available dispatcher of your choice.
+The non-suspend APIs invoke a functional parameter when they are complete, if you are using PerSista on Android this will arrive on the main thread. For non UI kotlin platforms (which don't have a Dispatchers.Main) you should override the mainDispatcher parameter in the constructor to an available dispatcher of your choice.
 
 ## License
 
