@@ -1,14 +1,12 @@
 package co.early.persista
 
 import co.early.fore.kt.core.logging.Logger
-import co.early.fore.kt.core.logging.SystemLogger
 import kotlinx.coroutines.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.concurrent.Executors
-import kotlin.coroutines.coroutineContext
 import kotlin.reflect.KClass
 import kotlin.reflect.typeOf
 
@@ -49,10 +47,10 @@ class PerSista(
         }
     }
 
-    suspend inline fun <reified T : Any> write(item: T) {
+    suspend inline fun <reified T : Any> write(item: T): T {
         val klass = T::class
-        val qualifiedName = getQualifiedName(klass, strictMode, logger)?: return
-        withContext(writeReadDispatcher) {
+        val qualifiedName = getQualifiedName(klass, strictMode, logger)?: return item
+        return withContext(writeReadDispatcher) {
             qualifiedName.let { className ->
                 try {
                     val serializer = serializer(typeOf<T>())
@@ -60,9 +58,12 @@ class PerSista(
                     logger?.d("WRITING to $className")
                     logger?.d("$jsonText")
                     getKeyFile(klass)?.writeText(jsonText, Charsets.UTF_8)
+                    item
                 } catch (e: Exception) {
                     logger?.e(
-                        "write failed (did you remember to add the kotlin serialization plugin to gradle? did you remember to add proguard rules for obfuscation? see the sample app in the PerSista repo)",
+                        "write failed (did you remember to add the kotlin serialization " +
+                                "plugin to gradle? did you remember to add proguard rules for " +
+                                "obfuscation? see the sample app in the PerSista repo)",
                         e
                     )
                     if (strictMode) {
@@ -94,7 +95,9 @@ class PerSista(
                         }
                         else -> {
                             logger?.e(
-                                "write failed (did you remember to add the kotlin serialization plugin to gradle? did you remember to add proguard rules for obfuscation? see the sample app in the PerSista repo)",
+                                "write failed (did you remember to add the kotlin serialization " +
+                                        "plugin to gradle? did you remember to add proguard rules for " +
+                                        "obfuscation? see the sample app in the PerSista repo)",
                                 e
                             )
                             if (strictMode) {
