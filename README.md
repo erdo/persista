@@ -2,7 +2,7 @@
 
 Small library for persisting _single instances_ of kotlin data classes.
 
-_NB: PerSista uses typeOf() internally which is marked as @ExperimentalStdlibApi so is subject to change (it is on its way to [stabilization](https://youtrack.jetbrains.com/issue/KT-45396) though)_
+_NB: PerSista uses typeOf() internally which is marked as @ExperimentalStdlibApi so is subject to change (it is on its way to [stabilization](https://youtrack.jetbrains.com/issue/KT-45396) though, the target is for Kotlin 1.6)_
 
 Firstly, what PerSista is not:
 

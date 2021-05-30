@@ -8,21 +8,17 @@ object Shared {
 
     object Publish {
 
-        //LIB_VERSION_NAME="0.9.25-SNAPSHOT"
-        const val LIB_VERSION_NAME = "0.1.1"
+        const val LIB_VERSION_NAME = "0.1.1" //"x.x.x-SNAPSHOT"
         const val LIB_VERSION_CODE = 1
 
-        const val REPO = "persista"
         const val LIB_GROUP = "co.early.persista"
         const val PROJ_NAME = "persista"
         const val LIB_DEVELOPER_ID = "erdo"
         const val LIB_DEVELOPER_NAME = "E Donovan"
         const val LIB_DEVELOPER_EMAIL = "eric@early.co"
-        const val POM_PACKAGING = "aar"
         const val POM_URL = "https://github.com/erdo/persista/"
         const val POM_SCM_URL = "https://github.com/erdo/persista/"
         const val POM_SCM_CONNECTION = "scm:git@github.com:erdo/persista.git"
-        const val POM_SCM_DEV_CONNECTION = "scm:git@github.com:erdo/persista.git"
         const val LICENCE_SHORT_NAME = "Apache-2.0"
         const val LICENCE_NAME = "The Apache Software License, Version 2.0"
         const val LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"

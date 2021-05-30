@@ -10,7 +10,7 @@ val LIB_DESCRIPTION by extra("persist single instances of kotlin data classes")
 println("[$LIB_ARTIFACT_ID build file]")
 
 dependencies {
-    api("co.early.fore:fore-core-kt:1.4.4")
+    api("co.early.fore:fore-core-kt:1.4.5")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.30")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")

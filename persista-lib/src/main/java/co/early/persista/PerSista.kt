@@ -1,5 +1,7 @@
 package co.early.persista
 
+import co.early.fore.kt.core.coroutine.awaitCustom
+import co.early.fore.kt.core.coroutine.launchCustom
 import co.early.fore.kt.core.logging.Logger
 import kotlinx.coroutines.*
 import kotlinx.serialization.json.Json
@@ -28,20 +30,19 @@ class PerSista(
     }
 
     inline fun <reified T : Any> write(item: T, crossinline complete: (T) -> Unit) {
-        CoroutineScope(mainDispatcher).launch {
-            write(item)
-            complete(item)
+        launchCustom(mainDispatcher) {
+            complete(write(item))
         }
     }
 
     inline fun <reified T : Any> read(default: T, crossinline complete: (T) -> Unit) {
-        CoroutineScope(mainDispatcher).launch {
+        launchCustom(mainDispatcher) {
             complete(read(default))
         }
     }
 
     fun wipeEverything(complete: () -> Unit) {
-        CoroutineScope(mainDispatcher).launch {
+        launchCustom(mainDispatcher) {
             wipeEverything()
             complete()
         }
@@ -50,7 +51,7 @@ class PerSista(
     suspend inline fun <reified T : Any> write(item: T): T {
         val klass = T::class
         val qualifiedName = getQualifiedName(klass, strictMode, logger)?: return item
-        return withContext(writeReadDispatcher) {
+        return awaitCustom(writeReadDispatcher) {
             qualifiedName.let { className ->
                 try {
                     val serializer = serializer(typeOf<T>())
@@ -79,7 +80,7 @@ class PerSista(
     suspend inline fun <reified T : Any> read(default: T): T {
         val klass = T::class
         val qualifiedName = getQualifiedName(klass, strictMode, logger) ?: return default
-        return withContext(writeReadDispatcher) {
+        return awaitCustom(writeReadDispatcher) {
             qualifiedName.let { className ->
                 try {
                     val serializer = serializer(typeOf<T>())
@@ -113,7 +114,7 @@ class PerSista(
 
     suspend fun wipeEverything() {
         logger?.d("wipeEverything()")
-        withContext(writeReadDispatcher) {
+        awaitCustom(writeReadDispatcher) {
             getPersistaFolder().deleteRecursively()
             getPersistaFolder().mkdirs()
         }
