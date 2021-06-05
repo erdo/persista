@@ -2,7 +2,7 @@
 
 Small library for persisting _single instances_ of kotlin data classes.
 
-_NB: PerSista uses typeOf() internally which is marked as @ExperimentalStdlibApi so is subject to change (it is on its way to [stabilization](https://youtrack.jetbrains.com/issue/KT-45396) though)_
+_NB: PerSista uses typeOf() internally which is marked as @ExperimentalStdlibApi so is subject to change (it is on its way to [stabilization](https://youtrack.jetbrains.com/issue/KT-45396) though, the target is for Kotlin 1.6)_
 
 Firstly, what PerSista is not:
 
@@ -30,7 +30,7 @@ It's currently being used in a clean architecture sample to persist app state in
 Copy the PerSista.kt class into your own app, or add this gradle line to your project (you'll also need mavenCentral() in your list of maven repos)
 
 ```
-implementation("co.early.persista:persista:0.1.1")
+implementation("co.early.persista:persista:0.1.2")
 ```
 
 
@@ -40,6 +40,7 @@ Construct PerSista with the folder you want your data saved to, for an android a
 
 ```
 val perSista = PerSista(application.filesDir)
+
 ```
 
 Define your data class, mark it serializable (also don't forget to add the kotlin serialization plugin to gradle)

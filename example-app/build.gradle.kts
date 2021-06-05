@@ -60,8 +60,9 @@ repositories {
 dependencies {
 
     implementation(project(":persista-lib"))
+    //implementation("co.early.persista:persista:0.1.1")
 
-    implementation("co.early.fore:fore-kt:1.4.4")
+    implementation("co.early.fore:fore-kt:1.4.5")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.4.30")
     implementation("androidx.multidex:multidex:2.0.1")
