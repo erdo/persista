@@ -1,14 +1,13 @@
 # PerSista
 
-[![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/persista/blob/main/LICENSE.txt){: .float-left}
+[![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/persista/blob/main/LICENSE.txt)
 
-![central-0.1.2](https://img.shields.io/badge/central-0.1.2-green.svg){: .float-left}
+![central-0.1.2](https://img.shields.io/badge/central-0.1.2-green.svg)
 
-![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
+![api-16](https://img.shields.io/badge/api-16%2B-orange.svg)
 
-[![circleci](https://circleci.com/gh/erdo/persista/tree/main.svg?style=shield)](https://circleci.com/gh/erdo/persista/tree/main){: .float-left}
+[![circleci](https://circleci.com/gh/erdo/persista/tree/main.svg?style=shield)](https://circleci.com/gh/erdo/persista/tree/main)
 
-<br/>
 <br/>
 
 Small library for persisting _single instances_ of kotlin data classes.
