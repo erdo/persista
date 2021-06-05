@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/persista/blob/main/LICENSE.txt){: .float-left}
 
-![central-0.1.2](https://img.shields.io/badge/central-1.4.5-green.svg){: .float-left}
+![central-0.1.2](https://img.shields.io/badge/central-0.1.2-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
