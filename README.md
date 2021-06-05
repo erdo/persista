@@ -1,5 +1,16 @@
 # PerSista
 
+[![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/persista/blob/master/LICENSE.txt){: .float-left}
+
+![central-0.1.2](https://img.shields.io/badge/central-1.4.5-green.svg){: .float-left}
+
+![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
+
+[![circleci](https://circleci.com/gh/erdo/persista/tree/master.svg?style=shield)](https://circleci.com/gh/erdo/persista/tree/master){: .float-left}
+
+<br/>
+<br/>
+
 Small library for persisting _single instances_ of kotlin data classes.
 
 _NB: PerSista uses typeOf() internally which is marked as @ExperimentalStdlibApi so is subject to change (it is on its way to [stabilization](https://youtrack.jetbrains.com/issue/KT-45396) though, the target is for Kotlin 1.6)_
