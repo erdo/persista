@@ -44,4 +44,12 @@ class Wallet(
             }
         }
     }
+
+    fun resetMobileWallet() {
+        perSista.clear(state.javaClass.kotlin){
+            logger.i("Persistent storage cleared")
+            state = WalletState(0)
+            notifyObservers()
+        }
+    }
 }

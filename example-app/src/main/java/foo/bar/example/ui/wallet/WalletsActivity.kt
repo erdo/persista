@@ -37,6 +37,10 @@ class WalletsActivity : FragmentActivity(R.layout.activity_wallet), SyncableView
             logger.i("decrease button clicked")
             wallet.decreaseMobileWallet() // observer / reactive ui handles updating the view
         }
+        wallet_clear_btn.setOnClickListener {
+            logger.i("clear button clicked")
+            wallet.resetMobileWallet() // observer / reactive ui handles updating the view
+        }
     }
 
     //reactive UI stuff below

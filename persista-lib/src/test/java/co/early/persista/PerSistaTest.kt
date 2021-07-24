@@ -4,19 +4,20 @@ import co.early.fore.kt.core.delegate.ForeDelegateHolder
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.logging.SystemLogger
-import co.early.persista.TestState.DashboardState
-import co.early.persista.TestState.SomethingElseState
+import co.early.persista.TestState.*
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
 import kotlinx.coroutines.*
 import kotlinx.serialization.SerializationException
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import java.io.File
 import java.util.concurrent.Executors
+import java.util.concurrent.Executors.newSingleThreadExecutor
 
 @ExperimentalStdlibApi
 class PerSistaTest {
@@ -25,7 +26,7 @@ class PerSistaTest {
     private lateinit var mockLogger: Logger
     private lateinit var dataFolder: TemporaryFolder
     private val logger = SystemLogger()
-    private val testDispatcher: CoroutineDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+    private val testDispatcher: CoroutineDispatcher = newSingleThreadExecutor().asCoroutineDispatcher()
 
     private val testState1 = DashboardState(
         dashboardId = 1,
@@ -35,7 +36,7 @@ class PerSistaTest {
         dashboardId = 2,
         userName = "odre",
         drivers = listOf(
-            TestState.Driver(
+            Driver(
                 driverId = 99,
                 driverName = "francis",
                 powerLevel = 100,
@@ -47,10 +48,11 @@ class PerSistaTest {
     private val testState3 = DashboardState(
         dashboardId = 3,
         userName = "uName",
-        error = TestState.Error.SECURITY
+        error = Error.SECURITY
     )
     private val testState4NonSerializable = SomethingElseState(1, "user1")
     private val testState5NonSerializable = SomethingElseState(2, "user2")
+    private val testState6 = MoreState(true)
 
     @Before
     fun setup() {
@@ -83,6 +85,71 @@ class PerSistaTest {
         // assert
         assertEquals(testState1, writeResponse)
         assertEquals(testState1, readResponse)
+    }
+
+    @Test
+    fun `when multiple states are written, multiple states are read`() {
+
+        // arrange
+        val perSista = createPerSista(dataFolder.newFolder())
+        var readResponseDashBoard: DashboardState? = null
+        var readResponseMoreState: MoreState? = null
+
+        logger.i("starting")
+
+        // act
+        perSista.write(testState1) {
+            logger.i("write response a : $it")
+        }
+        perSista.write(testState6) {
+            logger.i("write response b : $it")
+        }
+        perSista.read(testState2) {
+            logger.i("read response a $it")
+            readResponseDashBoard = it
+        }
+        perSista.read(MoreState()) {
+            logger.i("read response b $it")
+            readResponseMoreState = it
+        }
+
+        // assert
+        assertEquals(testState1, readResponseDashBoard)
+        assertEquals(testState6, readResponseMoreState)
+    }
+
+    @Test
+    fun `when multiple states are written, one is cleared, other state is read`() {
+
+        // arrange
+        val perSista = createPerSista(dataFolder.newFolder())
+        var readResponseDashBoard: DashboardState? = null
+        var readResponseMoreState: MoreState? = null
+
+        logger.i("starting")
+
+        // act
+        perSista.write(testState1) {
+            logger.i("write response a : $it")
+        }
+        perSista.write(testState6) {
+            logger.i("write response b : $it")
+        }
+        perSista.clear(testState1.javaClass.kotlin) {
+            logger.i("cleared a")
+        }
+        perSista.read(testState2) {
+            logger.i("read response a $it")
+            readResponseDashBoard = it
+        }
+        perSista.read(MoreState()) {
+            logger.i("read response b $it")
+            readResponseMoreState = it
+        }
+
+        // assert
+        assertEquals(testState2, readResponseDashBoard)
+        assertEquals(testState6, readResponseMoreState)
     }
 
     @Test
@@ -133,7 +200,7 @@ class PerSistaTest {
     }
 
     @Test
-    fun `when state is written then wiped, default state is read`() {
+    fun `when state is written then everything wiped, default state is read`() {
 
         // arrange
         val perSista = createPerSista(dataFolder.newFolder())
@@ -147,6 +214,53 @@ class PerSistaTest {
         }
         perSista.wipeEverything {
             logger.i("wipeEverything complete")
+        }
+        perSista.read(testState1) {
+            logger.i("read response $it")
+            readResponse = it
+        }
+
+        // assert
+        assertEquals(testState1, readResponse)
+    }
+
+    @Test
+    fun `when state is written then cleared, default state is read`() {
+
+        // arrange
+        val perSista = createPerSista(dataFolder.newFolder())
+        var readResponse: DashboardState? = null
+
+        logger.i("starting")
+
+        // act
+        perSista.write(testState2) {
+            logger.i("write response $it")
+        }
+        perSista.clear(testState2.javaClass.kotlin) {
+            logger.i("clear complete")
+        }
+        perSista.read(testState1) {
+            logger.i("read response $it")
+            readResponse = it
+        }
+
+        // assert
+        assertEquals(testState1, readResponse)
+    }
+
+    @Test
+    fun `when state is cleared without being written, default state is read`() {
+
+        // arrange
+        val perSista = createPerSista(dataFolder.newFolder())
+        var readResponse: DashboardState? = null
+
+        logger.i("starting")
+
+        // act
+        perSista.clear(testState1.javaClass.kotlin) {
+            logger.i("clear complete")
         }
         perSista.read(testState1) {
             logger.i("read response $it")
@@ -220,7 +334,7 @@ class PerSistaTest {
     }
 
     @Test
-    fun `when state is written then wiped with suspending api, default state is read`() {
+    fun `when state is written then everything wiped with suspending api, default state is read`() {
 
         // arrange
         val perSista = createPerSista(dataFolder.newFolder())
@@ -233,6 +347,28 @@ class PerSistaTest {
         runBlocking {
             writeResponse = perSista.write(testState2)
             perSista.wipeEverything()
+            readResponse = perSista.read(testState1)
+        }
+
+        // assert
+        assertEquals(testState2, writeResponse)
+        assertEquals(testState1, readResponse)
+    }
+
+    @Test
+    fun `when state is written then cleared with suspending api, default state is read`() {
+
+        // arrange
+        val perSista = createPerSista(dataFolder.newFolder())
+        var writeResponse: DashboardState?
+        var readResponse: DashboardState?
+
+        logger.i("starting")
+
+        // act
+        runBlocking {
+            writeResponse = perSista.write(testState2)
+            perSista.clear(testState2.javaClass.kotlin)
             readResponse = perSista.read(testState1)
         }
 
@@ -260,7 +396,7 @@ class PerSistaTest {
     }
 
     @Test
-    fun `when state is not written, with strict mode true, error is logged`() {
+    fun `when state is not written, with strict mode true, error is logged on read`() {
 
         // arrange
         val perSista = createPerSista(dataFolder.newFolder(), true, mockLogger)
@@ -274,7 +410,7 @@ class PerSistaTest {
         }
 
         // assert
-        verify(exactly = 1) { mockLogger.e(any(), any<Throwable>())}
+        verify(exactly = 1) { mockLogger.e(any(), any<Throwable>()) }
         assertEquals(testState1, readResponse)
     }
 
@@ -315,7 +451,24 @@ class PerSistaTest {
         }
 
         // assert
-        verify(exactly = 1) { mockLogger.e(any(), any<Throwable>())}
+        verify(exactly = 1) { mockLogger.e(any(), any<Throwable>()) }
+    }
+
+    @Test
+    fun `when clearing non-serializable state, with strict mode false, no exception thrown`() {
+
+        // arrange
+        val perSista = createPerSista(dataFolder.newFolder(), false)
+
+        logger.i("starting")
+
+        // act
+        runBlocking {
+            perSista.clear(testState4NonSerializable.javaClass.kotlin)
+        }
+
+        // assert
+        assert(true)
     }
 
     @Test
@@ -332,7 +485,7 @@ class PerSistaTest {
             runBlocking {
                 perSista.write(testState4NonSerializable)
             }
-        } catch (e: Exception){
+        } catch (e: Exception) {
             exception = e
         }
 
@@ -345,20 +498,16 @@ class PerSistaTest {
 
         // arrange
         val perSista = createPerSista(dataFolder.newFolder(), false)
-        var writeResponse: DashboardState?
         var readResponse: DashboardState?
 
         logger.i("starting")
 
         // act
         runBlocking {
-            writeResponse = perSista.write(testState2)
-            perSista.wipeEverything()
             readResponse = perSista.read(testState1)
         }
 
         // assert
-        assertEquals(testState2, writeResponse)
         assertEquals(testState1, readResponse)
     }
 
@@ -376,7 +525,7 @@ class PerSistaTest {
         }
 
         // assert
-        verify(exactly = 1) { mockLogger.e(any(), any<Throwable>())}
+        verify(exactly = 1) { mockLogger.e(any(), any<Throwable>()) }
     }
 
     @Test
@@ -393,7 +542,7 @@ class PerSistaTest {
             runBlocking {
                 perSista.read(testState4NonSerializable)
             }
-        } catch (e: Exception){
+        } catch (e: Exception) {
             exception = e
         }
 

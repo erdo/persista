@@ -41,6 +41,13 @@ class PerSista(
         }
     }
 
+    inline fun <reified T : Any> clear(klass: KClass<T>, crossinline complete: () -> Unit) {
+        launchCustom(mainDispatcher) {
+            clear(klass)
+            complete()
+        }
+    }
+
     fun wipeEverything(complete: () -> Unit) {
         launchCustom(mainDispatcher) {
             wipeEverything()
@@ -50,7 +57,7 @@ class PerSista(
 
     suspend inline fun <reified T : Any> write(item: T): T {
         val klass = T::class
-        val qualifiedName = getQualifiedName(klass, strictMode, logger)?: return item
+        val qualifiedName = getQualifiedName(klass, strictMode, logger) ?: return item
         return awaitCustom(writeReadDispatcher) {
             qualifiedName.let { className ->
                 try {
@@ -107,6 +114,25 @@ class PerSista(
                         }
                     }
                     default
+                }
+            }
+        }
+    }
+
+    suspend inline fun <reified T : Any> clear(klass: KClass<T>) {
+        val qualifiedName = getQualifiedName(klass, strictMode, logger) ?: return
+        awaitCustom(writeReadDispatcher) {
+            qualifiedName.let { className ->
+                try {
+                    logger?.d("CLEARING $className")
+                    getKeyFile(klass)?.delete()
+                } catch (e: Exception) {
+                    logger?.e("clear failed", e)
+                    if (strictMode) {
+                        throw e
+                    } else {
+                        return@let Unit
+                    }
                 }
             }
         }

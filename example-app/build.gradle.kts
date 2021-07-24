@@ -66,7 +66,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.4.30")
     implementation("androidx.multidex:multidex:2.0.1")
-    implementation("io.coil-kt:coil:1.1.0")
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
 

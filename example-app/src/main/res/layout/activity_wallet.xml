@@ -95,6 +95,12 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/wallet_clear_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="clear storage and reset mobile wallet" />
+
     </LinearLayout>
 
 </ScrollView>

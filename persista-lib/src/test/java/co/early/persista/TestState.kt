@@ -30,6 +30,11 @@ class TestState {
         IO
     }
 
+    @Serializable
+    data class MoreState(
+        val data: Boolean = false
+    )
+
     data class SomethingElseState(
         val someId: Int,
         val someUserName: String,
