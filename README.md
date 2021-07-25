@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/persista/blob/main/LICENSE.txt)
 
-![central-0.1.2](https://img.shields.io/badge/central-0.1.3-green.svg)
+![central-0.1.3](https://img.shields.io/badge/central-0.1.3-green.svg)
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg)
 
@@ -18,9 +18,8 @@ _NB: PerSista uses typeOf() internally which is marked as @ExperimentalStdlibApi
 ```
 val state = DashboardState(dashboardId = 777, userName = "erdo")
 
-// with the suspend api
 perSista.write(state)
-val state = perSista.read(default = state)
+perSista.read(default = state)
 
 // or from outside a coroutine scope
 perSista.write(state){ savedState ->  }
@@ -32,7 +31,7 @@ perSista.read(default = state){ readState ->  }
 - pure Kotlin so can be used in non-android modules
 - coroutine based
 - very simple API
-- tiny (~150 lines of code)
+- tiny (<200 lines of code)
 
 ## Restrictions
 - can only save one instance per data class: write a second instance of the same class, it will just overwrite the previous one
@@ -40,7 +39,7 @@ perSista.read(default = state){ readState ->  }
 
 ## How to get it
 
-Copy the PerSista.kt class into your own app, or add this gradle line to your project (you'll also need mavenCentral() in your list of maven repos)
+Copy the PerSista.kt class into your own app and edit as appropriate, or add this gradle line to your project (you'll need mavenCentral() in your list of maven repos)
 
 ```
 implementation("co.early.persista:persista:0.1.3")
@@ -105,7 +104,7 @@ perSista.read(defaultState){ readState ->
 
 ## How it works
 
-PerSista uses Kotlin's built in Serialization to turn data classes into json. Because it needs to accept any data class you might throw at it, it depends on typeOf() internally to work out the class type of the item - typeOf() is marked as @ExperimentalStdlibApi at the moment so it could potentially change in future.
+PerSista uses Kotlin's built in Serialization to turn data classes into json. Because it needs to accept any data class you might throw at it, it depends on typeOf() internally to work out the class type of the item
 
 PerSista prioritizes correctness over performance, all the reads and writes are guaranteed to be done sequentially as they are performed using a coroutine dispatcher created from a single-threaded Executor (though you can override that if you want)
 
@@ -128,13 +127,13 @@ It's up to you to ensure that you only pass something which is serializable to t
 If you DO want to receive exceptions (during development for instance) pass 'strictMode = true' to the constructor, in that case, the only time you still won't receive an exception when something goes wrong is when an attempted read fails because it can't find the file (that's most likely because a write was never performed in the first place).
 
 ## Performance
-Performance is "ok", and nothing is run on the UI thread anyway. On a 2017 Pixel XL, PerSista seems to have a setup overhead of around 400ms the first time it writes, after that a small instance of a data class takes around 2-30ms to store.
+Performance is "ok". On a 2017 Pixel XL, PerSista seems to have a setup overhead of around 400ms the first time it writes, after that a small instance of a data class takes around 2-30ms to store, but importantly **none of the IO is run on the UI thread anyway** so your UI won't be blocked and you won't see any jank.
 
 ## Versioning
 PerSista has no concept of data class versioning, so if you change the definition of your data class (due to an app upgrade for instance) and kotlin serialization is no longer able to decode the old json to the new data class, you will just get your default value back.
 
 ## Obfuscation
-The same advice applies here as would apply to any strategy that uses class names for serialization. The state of your data class will be saved in a file named after the data class's qualified name e.g. "foo.bar.app.DashboardState". If that data class gets obfuscated however, the qualified name could easily be renamed to something like "a.b.c.a". If you release a new version of the app, this time the qualified name could be renamed to "b.c.d.d" and PerSista won't be able to find the data from your previous installation. Check the example app's proguard configuration for details.
+**The same advice applies here as would apply to any strategy that uses class names for serialization**. The state of your data class will be saved in a file named after the data class's qualified name e.g. "foo.bar.app.DashboardState". If that data class gets obfuscated however, the qualified name could easily be renamed to something like "a.b.c.a". If you release a new version of the app, this time the qualified name could be renamed to "b.c.d.d" and PerSista will consider that a new class. Check the example app's proguard configuration if you want to prevent this behaviour (it's the same as what you are probably already doing to use ktor).
 
 ## Permissions
 None required on Android, as long as you stick to the internal app directory: `Application.getFilesDir()`
