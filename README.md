@@ -44,7 +44,7 @@ Copy the PerSista.kt class into your own app and edit as appropriate, or add thi
 ```
 implementation("co.early.persista:persista:0.2.0")
 ```
-
+(PerSista 0.2.0 is built with Kotlin 1.5.10, you can use PerSista 0.1.3 if you are still on Kotlin 1.4.30, but either will probably work fine)
 
 ## How to use it
 
