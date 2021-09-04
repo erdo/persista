@@ -13,8 +13,8 @@ val appId = "foo.bar.example"
 android {
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     compileSdkVersion(30)
@@ -62,7 +62,7 @@ dependencies {
     implementation(project(":persista-lib"))
     //implementation("co.early.persista:persista:0.2.0")
 
-    implementation("co.early.fore:fore-kt:1.4.7")
+    implementation("co.early.fore:fore-kt:1.4.10")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.10")
     implementation("androidx.multidex:multidex:2.0.1")
