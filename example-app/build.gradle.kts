@@ -60,7 +60,7 @@ repositories {
 dependencies {
 
     implementation(project(":persista-lib"))
-    //implementation("co.early.persista:persista:0.2.0")
+    //implementation("co.early.persista:persista:0.2.1")
 
     implementation("co.early.fore:fore-kt:1.4.11")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
