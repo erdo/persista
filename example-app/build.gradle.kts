@@ -62,12 +62,12 @@ dependencies {
     implementation(project(":persista-lib"))
     //implementation("co.early.persista:persista:0.2.1")
 
-    implementation("co.early.fore:fore-kt:1.4.11")
+    implementation("co.early.fore:fore-kt-android:1.5.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.10")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.31")
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("androidx.appcompat:appcompat:1.3.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.4")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.1")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("io.mockk:mockk:1.11.0")
