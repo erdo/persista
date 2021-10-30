@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import co.early.fore.core.ui.SyncableView
 import co.early.fore.kt.core.logging.Logger
-import co.early.fore.kt.core.ui.ForeLifecycleObserver
+import co.early.fore.kt.core.ui.LifecycleObserver
 import foo.bar.example.OG
 import foo.bar.example.R
 import foo.bar.example.feature.wallet.Wallet
@@ -23,7 +23,7 @@ class WalletsActivity : FragmentActivity(R.layout.activity_wallet), SyncableView
         super.onCreate(savedInstanceState)
         logger.i("onCreate()")
 
-        lifecycle.addObserver(ForeLifecycleObserver(this, wallet))
+        lifecycle.addObserver(LifecycleObserver(this, wallet))
 
         setupButtonClickListeners()
     }
