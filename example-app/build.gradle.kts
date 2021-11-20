@@ -53,6 +53,7 @@ android {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
     google()
 }
@@ -62,7 +63,7 @@ dependencies {
     implementation(project(":persista-lib"))
     //implementation("co.early.persista:persista:0.2.2")
 
-    implementation("co.early.fore:fore-kt-android:1.5.2")
+    implementation("co.early.fore:fore-kt-android:1.5.4")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.31")
     implementation("androidx.multidex:multidex:2.0.1")

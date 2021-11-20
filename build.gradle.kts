@@ -1,6 +1,5 @@
 buildscript {
     repositories {
-        mavenLocal()
         mavenCentral()
         google()
     }
@@ -17,9 +16,9 @@ plugins {
 
 allprojects {
     repositories {
+        mavenLocal()
         mavenCentral()
         google()
-        mavenLocal()
     }
 }
 
