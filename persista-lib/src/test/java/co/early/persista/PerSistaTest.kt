@@ -19,7 +19,6 @@ import java.io.File
 import java.util.concurrent.Executors
 import java.util.concurrent.Executors.newSingleThreadExecutor
 
-@ExperimentalStdlibApi
 class PerSistaTest {
 
     @MockK

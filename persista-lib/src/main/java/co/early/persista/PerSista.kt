@@ -15,7 +15,6 @@ import kotlin.reflect.typeOf
 /**
  * Copyright © 2021 early.co. All rights reserved.
  */
-@ExperimentalStdlibApi
 class PerSista(
     private val dataDirectory: File,
     @PublishedApi internal val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,

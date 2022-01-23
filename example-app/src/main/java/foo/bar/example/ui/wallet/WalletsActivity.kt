@@ -13,7 +13,6 @@ import kotlinx.android.synthetic.main.activity_wallet.*
 /**
  * Copyright © 2015-2021 early.co. All rights reserved.
  */
-@ExperimentalStdlibApi
 class WalletsActivity : FragmentActivity(R.layout.activity_wallet), SyncableView {
 
     private val wallet: Wallet = OG[Wallet::class.java]

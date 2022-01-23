@@ -13,7 +13,6 @@ import java.util.HashMap
  *
  * Copyright © 2015-2021 early.co. All rights reserved.
  */
-@ExperimentalStdlibApi
 @Suppress("UNUSED_PARAMETER")
 object OG {
 

@@ -7,7 +7,6 @@ import co.early.fore.kt.core.delegate.ForeDelegateHolder
 /**
  * Copyright © 2015-2021 early.co. All rights reserved.
  */
-@ExperimentalStdlibApi
 class App : Application() {
 
     override fun onCreate() {

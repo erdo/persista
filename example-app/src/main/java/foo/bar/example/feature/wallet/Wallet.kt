@@ -9,7 +9,6 @@ import co.early.persista.PerSista
  * Copyright © 2015-2021 early.co. All rights reserved.
  */
 
-@ExperimentalStdlibApi
 class Wallet(
     private val perSista: PerSista,
     private val logger: Logger,
