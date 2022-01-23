@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/persista/blob/main/LICENSE.txt)
 
-![central-0.2.3](https://img.shields.io/badge/central-0.2.3-green.svg)
+![central-1.0.0](https://img.shields.io/badge/central-1.0.0-green.svg)
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg)
 
@@ -11,9 +11,6 @@
 <br/>
 
 Small library for persisting _single instances_ of kotlin data classes. It's particularly useful as a way to asynchronously persist immutable state.
-
-_NB: PerSista uses typeOf() internally which is marked as @ExperimentalStdlibApi so is subject to change (it is on its way to [stabilization](https://youtrack.jetbrains.com/issue/KT-45396) though, the target is for Kotlin 1.6)_
-
 
 ```
 val state = DashboardState(dashboardId = 777, userName = "erdo")
@@ -42,9 +39,9 @@ perSista.read(default = state){ readState ->  }
 Copy the PerSista.kt class into your own app and edit as appropriate, or add this gradle line to your project (you'll need mavenCentral() in your list of maven repos)
 
 ```
-implementation("co.early.persista:persista:0.2.3")
+implementation("co.early.persista:persista:1.0.0")
 ```
-(PerSista 0.2.3 is built with Kotlin 1.5.31, you could also use: PerSista 0.2.1 (Kotlin 1.5.10) or PerSista 0.1.3 (Kotlin 1.4.30) but any will probably work fine)
+PerSista 1.0.0 and above requires kotlin 1.6 and above. (PerSista uses kotlin's _typeOf_ internally which was marked as experimental prior to kotlin 1.6 - previous versions of PerSista which are also marked as experimental accordingly can be used for earlier versions of kotlin: e.g. PerSista 0.2.3)
 
 ## How to use it
 
@@ -149,7 +146,7 @@ The non-suspend APIs invoke a functional parameter when they are complete, if yo
 
 ## License
 
-    Copyright 2015-2021 early.co
+    Copyright 2015-2022 early.co
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
