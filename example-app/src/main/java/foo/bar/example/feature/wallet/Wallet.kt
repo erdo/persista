@@ -27,8 +27,8 @@ class Wallet(
     fun increaseMobileWallet() {
         if (state.canIncrease()) {
             perSista.write(state.copy(mobileWalletAmount = state.mobileWalletAmount + 1)) {
+                logger.i("Increased mobile wallet to:${it.mobileWalletAmount}")
                 state = it
-                logger.i("Increased mobile wallet to:${state.mobileWalletAmount}")
                 notifyObservers()
             }
         }
@@ -37,8 +37,8 @@ class Wallet(
     fun decreaseMobileWallet() {
         if (state.canDecrease()) {
             perSista.write(state.copy(mobileWalletAmount = state.mobileWalletAmount - 1)) {
+                logger.i("Decreased mobile wallet to:${it.mobileWalletAmount}")
                 state = it
-                logger.i("Decreased mobile wallet to:${state.mobileWalletAmount}")
                 notifyObservers()
             }
         }
