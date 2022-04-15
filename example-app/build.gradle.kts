@@ -1,11 +1,9 @@
 plugins {
     id("com.android.application")
-    id("maven")
-    id("idea")
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
-    id("org.jetbrains.kotlin.plugin.serialization")
+    kotlin("plugin.serialization")
 }
 
 val appId = "foo.bar.example"
@@ -17,12 +15,12 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    compileSdkVersion(31)
+    compileSdk = 31
 
     defaultConfig {
         applicationId = appId
-        minSdkVersion(16)
-        targetSdkVersion(31)
+        minSdk = 16
+        targetSdk = 31
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -63,9 +61,9 @@ dependencies {
     implementation(project(":persista-lib"))
     //implementation("co.early.persista:persista:1.0.0")
 
-    implementation("co.early.fore:fore-kt-android:1.5.7")
+    implementation("co.early.fore:fore-kt-android:1.5.10")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.20")
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.3")
