@@ -2,7 +2,7 @@ package foo.bar.example
 
 import android.app.Application
 import co.early.fore.kt.core.delegate.DebugDelegateDefault
-import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.Fore
 
 /**
  * Copyright © 2015-2021 early.co. All rights reserved.
@@ -13,7 +13,7 @@ class App : Application() {
         super.onCreate()
 
         if (BuildConfig.DEBUG){
-            ForeDelegateHolder.setDelegate(DebugDelegateDefault("persista_"))
+            Fore.setDelegate(DebugDelegateDefault("persista_"))
         }
 
         inst = this
