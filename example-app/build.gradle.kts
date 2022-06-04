@@ -44,8 +44,8 @@ android {
             signingConfig = signingConfigs.getByName("release")
         }
     }
-    lintOptions {
-        isAbortOnError = true
+    lint {
+        abortOnError = true
         lintConfig = File(project.rootDir, "lint-example-app.xml")
     }
 }
@@ -61,9 +61,9 @@ dependencies {
     implementation(project(":persista-lib"))
     //implementation("co.early.persista:persista:1.0.0")
 
-    implementation("co.early.fore:fore-kt-android:1.5.10")
+    implementation("co.early.fore:fore-kt-android:1.5.13")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.20")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.21")
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.3")

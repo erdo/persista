@@ -15,8 +15,8 @@ java {
 }
 
 dependencies {
-    implementation("co.early.fore:fore-kt-core:1.5.10")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.20")
+    implementation("co.early.fore:fore-kt-core:1.5.13")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
 
