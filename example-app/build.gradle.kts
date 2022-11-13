@@ -15,12 +15,12 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    compileSdk = 31
+    compileSdk = 33
 
     defaultConfig {
         applicationId = appId
         minSdk = 16
-        targetSdk = 31
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -62,11 +62,11 @@ dependencies {
     //implementation("co.early.persista:persista:1.0.0")
 
     implementation("co.early.fore:fore-kt-android:1.5.14")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.21")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.7.10")
     implementation("androidx.multidex:multidex:2.0.1")
-    implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.3")
+    implementation("androidx.appcompat:appcompat:1.5.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("io.mockk:mockk:1.11.0")
