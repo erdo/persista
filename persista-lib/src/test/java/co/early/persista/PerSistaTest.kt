@@ -11,13 +11,12 @@ import io.mockk.verify
 import kotlinx.coroutines.*
 import kotlinx.serialization.SerializationException
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import java.io.File
-import java.util.concurrent.Executors
 import java.util.concurrent.Executors.newSingleThreadExecutor
+import kotlin.reflect.typeOf
 
 class PerSistaTest {
 
@@ -547,6 +546,53 @@ class PerSistaTest {
 
         // assert
         assertEquals(SerializationException::class.java, exception?.javaClass)
+    }
+
+    @Test
+    fun `when state is written with manually specified type, state is read`() {
+
+        // arrange
+        val perSista = createPerSista(dataFolder.newFolder())
+        var writeResponse: DashboardState? = null
+        var readResponse: DashboardState? = null
+
+        logger.i("starting")
+
+        // act
+        perSista.write(testState1, typeOf<DashboardState>()) {
+            logger.i("write response: $it")
+            writeResponse = it
+        }
+        perSista.read(testState2, typeOf<DashboardState>()) {
+            logger.i("read response $it")
+            readResponse = it
+        }
+
+        // assert
+        assertEquals(testState1, writeResponse)
+        assertEquals(testState1, readResponse)
+    }
+
+    @Test
+    fun `when writing state with wrong type parameter, exception is thrown`() {
+
+        // arrange
+        val perSista = createPerSista(dataFolder.newFolder(), true)
+        var exception: Exception? = null
+
+        logger.i("starting")
+
+        // act
+        try {
+            perSista.write(testState4NonSerializable, typeOf<Driver>()) {
+                logger.i("write response: $it")
+            }
+        } catch (e: Exception) {
+            exception = e
+        }
+
+        // assert
+        assertEquals(ClassCastException::class.java, exception?.javaClass)
     }
 
     private fun createPerSista(

@@ -10,6 +10,7 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.util.concurrent.Executors
 import kotlin.reflect.KClass
+import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
 /**
@@ -30,13 +31,25 @@ class PerSista(
 
     inline fun <reified T : Any> write(item: T, crossinline complete: (T) -> Unit) {
         launchCustom(mainDispatcher) {
-            complete(write(item))
+            complete(write(item, typeOf<T>()))
+        }
+    }
+
+    fun <T : Any> write(item: T, type: KType, complete: (T) -> Unit) {
+        launchCustom(mainDispatcher) {
+            complete(write(item, type))
         }
     }
 
     inline fun <reified T : Any> read(default: T, crossinline complete: (T) -> Unit) {
         launchCustom(mainDispatcher) {
-            complete(read(default))
+            complete(read(default, typeOf<T>()))
+        }
+    }
+
+    fun <T : Any> read(default: T, type: KType, complete: (T) -> Unit) {
+        launchCustom(mainDispatcher) {
+            complete(read(default, type))
         }
     }
 
@@ -55,17 +68,26 @@ class PerSista(
     }
 
     suspend inline fun <reified T : Any> write(item: T): T {
-        val klass = T::class
+        return write(item, typeOf<T>())
+    }
+
+    suspend fun <T : Any> write(item: T, type: KType): T {
+        @Suppress("UNCHECKED_CAST")
+        val klass = type.classifier as KClass<T>
         val qualifiedName = getQualifiedName(klass, strictMode, logger) ?: return item
         return awaitCustom(writeReadDispatcher) {
             qualifiedName.let { className ->
                 try {
-                    val serializer = serializer(typeOf<T>())
+                    val serializer = serializer(type)
                     val jsonText = Json.encodeToString(serializer, item)
                     logger?.d("WRITING to $className")
-                    logger?.d("$jsonText")
+                    logger?.d(jsonText)
                     getKeyFile(klass)?.writeText(jsonText, Charsets.UTF_8)
                     item
+                } catch (cce: ClassCastException){
+                    logger?.e("Usage: write(\"myString\", typeOf<String>()) Wrong type specified, must " +
+                             "be typeOf<T>, not typeOf<${type.classifier}>")
+                    throw cce
                 } catch (e: Exception) {
                     logger?.e(
                         "write failed (did you remember to add the kotlin serialization " +
@@ -84,21 +106,29 @@ class PerSista(
     }
 
     suspend inline fun <reified T : Any> read(default: T): T {
-        val klass = T::class
+        return read(default, typeOf<T>())
+    }
+
+    suspend fun <T : Any> read(default: T, type: KType): T {
+        @Suppress("UNCHECKED_CAST")
+        val klass = type.classifier as KClass<T>
         val qualifiedName = getQualifiedName(klass, strictMode, logger) ?: return default
         return awaitCustom(writeReadDispatcher) {
             qualifiedName.let { className ->
                 try {
-                    val serializer = serializer(typeOf<T>())
+                    val serializer = serializer(type)
                     logger?.d("READING from $className")
                     getKeyFile(klass)?.readText(Charsets.UTF_8)?.let { jsonText ->
-                        logger?.d("$jsonText")
+                        logger?.d(jsonText)
+                        @Suppress("UNCHECKED_CAST")
                         Json.decodeFromString(serializer, jsonText) as T
                     } ?: default
                 } catch (e: Exception) {
                     when (e) {
                         is FileNotFoundException -> {
-                            logger?.e("file not found, maybe it was never written?", e);
+                            logger?.e("file not found, maybe it was never written? or " +
+                                    "if you are manually specifying the type, maybe you have " +
+                                    "specified the wrong type (usage: read(\"myString\", typeOf<String>())", e)
                         }
                         else -> {
                             logger?.e(
