@@ -8,8 +8,8 @@ object Shared {
 
     object Publish {
 
-        const val LIB_VERSION_NAME = "1.2.0" //"x.x.x-SNAPSHOT"
-        const val LIB_VERSION_CODE = 10
+        const val LIB_VERSION_NAME = "1.3.0" //"x.x.x-SNAPSHOT"
+        const val LIB_VERSION_CODE = 11
 
         const val LIB_GROUP = "co.early.persista"
         const val PROJ_NAME = "persista"
