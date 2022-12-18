@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/persista/blob/main/LICENSE.txt)
 
-![central-1.2.0](https://img.shields.io/badge/central-1.2.0-green.svg)
+![central-1.3.0](https://img.shields.io/badge/central-1.3.0-green.svg)
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg)
 
@@ -39,7 +39,7 @@ perSista.read(default = state){ readState ->  }
 Copy the PerSista.kt class into your own app and edit as appropriate, or add this gradle line to your project (you'll need mavenCentral() in your list of maven repos)
 
 ```
-implementation("co.early.persista:persista:1.2.0")
+implementation("co.early.persista:persista:1.3.0")
 ```
 
 ## How to use it
