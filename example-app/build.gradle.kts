@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("android.extensions")
     kotlin("kapt")
     kotlin("plugin.serialization")
 }
@@ -43,6 +42,9 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "../proguard-example-app.pro")
             signingConfig = signingConfigs.getByName("release")
         }
+    }
+    buildFeatures {
+        viewBinding = true
     }
     lint {
         abortOnError = true
