@@ -134,6 +134,9 @@ PerSista has no concept of data class versioning, so if you change the definitio
 ## Permissions
 None required on Android, as long as you stick to the internal app directory: `Application.getFilesDir()`
 
+## Testing
+If you want to unit test a class that uses PerSista, you can of course mock the perSista instance. But you can also use a real PerSista instance with a org.junit.rules.TemporaryFolder and a test dispatcher. See the [unit tests](https://github.com/erdo/persista/blob/main/persista-lib/src/test/java/co/early/persista/PerSistaTest.kt) in this repo for an example.
+
 ## Example App
 
 ![example app screenshot](exampleapp.png)
