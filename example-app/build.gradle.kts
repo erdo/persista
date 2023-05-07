@@ -50,6 +50,7 @@ android {
         abortOnError = true
         lintConfig = File(project.rootDir, "lint-example-app.xml")
     }
+    namespace = "foo.bar.example"
 }
 
 repositories {
@@ -63,7 +64,7 @@ dependencies {
     implementation(project(":persista-lib"))
     //implementation("co.early.persista:persista:1.4.0")
 
-    implementation("co.early.fore:fore-kt-android:1.5.20")
+    implementation("co.early.fore:fore-kt-android:1.5.24")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
