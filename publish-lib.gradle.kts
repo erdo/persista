@@ -1,6 +1,7 @@
 /**
  * ./gradlew check
  *
+ * ./gradlew test
  * ./gradlew testDebugUnitTest
  * ./gradlew connectedAndroidTest
  *

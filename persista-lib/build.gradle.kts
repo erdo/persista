@@ -1,5 +1,4 @@
 plugins {
-    id("java-library")
     id("kotlin")
     id("org.jetbrains.kotlin.plugin.serialization")
 }
@@ -9,9 +8,10 @@ val LIB_DESCRIPTION by extra("persist single instances of kotlin data classes")
 
 println("[$LIB_ARTIFACT_ID build file]")
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
 }
 
 dependencies {
