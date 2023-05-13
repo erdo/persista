@@ -16,6 +16,11 @@ kotlin {
 android {
 
     compileSdk = 33
+    namespace = "foo.bar.example"
+
+    buildFeatures {
+        viewBinding = true
+    }
 
     defaultConfig {
         applicationId = appId
@@ -44,20 +49,10 @@ android {
             signingConfig = signingConfigs.getByName("release")
         }
     }
-    buildFeatures {
-        viewBinding = true
-    }
     lint {
         abortOnError = true
         lintConfig = File(project.rootDir, "lint-example-app.xml")
     }
-    namespace = "foo.bar.example"
-}
-
-repositories {
-    mavenLocal()
-    mavenCentral()
-    google()
 }
 
 dependencies {
@@ -66,7 +61,7 @@ dependencies {
     //implementation("co.early.persista:persista:1.4.0")
 
     implementation("co.early.fore:fore-kt-android:1.5.24")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
