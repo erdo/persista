@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/persista/blob/main/LICENSE.txt)
 
-![central-1.5.1](https://img.shields.io/badge/central-1.5.1-green.svg)
+![central-1.5.2](https://img.shields.io/badge/central-1.5.2-green.svg)
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg)
 
@@ -28,7 +28,7 @@ perSista.read(default = state){ readState ->  }
 - pure Kotlin so can be used in non-android modules
 - coroutine based
 - very simple API
-- tiny (<200 lines of code)
+- tiny (~200 lines of code)
 
 ## Restrictions
 - can only save one instance per data class: write a second instance of the same class, it will just overwrite the previous one
@@ -39,7 +39,7 @@ perSista.read(default = state){ readState ->  }
 Copy the PerSista.kt class into your own app and edit as appropriate, or add this gradle line to your project (you'll need mavenCentral() in your list of maven repos)
 
 ```
-implementation("co.early.persista:persista:1.5.1")
+implementation("co.early.persista:persista:1.5.2")
 ```
 
 ## How to use it
