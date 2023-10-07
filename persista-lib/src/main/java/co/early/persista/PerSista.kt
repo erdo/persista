@@ -23,6 +23,7 @@ class PerSista(
         .asCoroutineDispatcher(),
     @PublishedApi internal val logger: Logger? = null,
     @PublishedApi internal val strictMode: Boolean = false,
+    @PublishedApi internal val json: Json = Json,
 ) {
 
     init {
@@ -79,7 +80,7 @@ class PerSista(
             qualifiedName.let { className ->
                 try {
                     val serializer = serializer(type)
-                    val jsonText = Json.encodeToString(serializer, item)
+                    val jsonText = json.encodeToString(serializer, item)
                     logger?.d("WRITING to $className")
                     logger?.d(jsonText)
                     getKeyFile(klass)?.writeText(jsonText, Charsets.UTF_8)
@@ -121,7 +122,7 @@ class PerSista(
                     getKeyFile(klass)?.readText(Charsets.UTF_8)?.let { jsonText ->
                         logger?.d(jsonText)
                         @Suppress("UNCHECKED_CAST")
-                        Json.decodeFromString(serializer, jsonText) as T
+                        json.decodeFromString(serializer, jsonText) as T
                     } ?: default
                 } catch (e: Exception) {
                     when (e) {
@@ -132,8 +133,8 @@ class PerSista(
                         }
                         else -> {
                             logger?.e(
-                                "write failed (did you remember to add the kotlin serialization " +
-                                        "plugin to gradle? did you remember to add proguard rules for " +
+                                "read failed (did you remember to add the kotlin serialization " +
+                                        "plugin to gradle? did you remember to add PROGUARD rules for " +
                                         "obfuscation? see the sample app in the PerSista repo)",
                                 e
                             )
