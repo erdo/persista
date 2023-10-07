@@ -14,7 +14,7 @@ import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
 /**
- * Copyright © 2021-22 early.co. All rights reserved.
+ * Copyright © 2021-23 early.co. All rights reserved.
  */
 class PerSista(
     private val dataDirectory: File,
