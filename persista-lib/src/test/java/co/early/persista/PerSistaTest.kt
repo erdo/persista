@@ -11,6 +11,7 @@ import io.mockk.verify
 import kotlinx.coroutines.*
 import kotlinx.serialization.SerializationException
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -51,6 +52,38 @@ class PerSistaTest {
     private val testState4NonSerializable = SomethingElseState(1, "user1")
     private val testState5NonSerializable = SomethingElseState(2, "user2")
     private val testState6 = MoreState(true)
+
+    private val testState7 = StateContainingSealedClass(Location.EuropeanLocations.London)
+    private val testState8 = StateContainingSealedClass(Location.NewYork)
+
+    private val testState9 = NestedDataClass(
+        nested = NestedDataClass(
+            nested = NestedDataClass(
+                nested = null,
+                value = "A"
+            )
+        )
+    )
+    private val testState10 = NestedDataClass(
+        nested = NestedDataClass(
+            nested = NestedDataClass(
+                nested = null,
+                value = "B"
+            )
+        )
+    )
+
+    private val testState11: SealedGenericClass<Location> = SealedGenericClass.A(Location.EuropeanLocations.Paris)
+    private val testState12: SealedGenericClass<Location> = SealedGenericClass.B(Location.Tokyo)
+
+    private val testState13: SealedGenericNestedClass<Location> = SealedGenericNestedClass.A(
+        listOf(
+            SealedGenericNestedClass.B(Location.NewYork),
+            SealedGenericNestedClass.B(Location.Tokyo),
+            SealedGenericNestedClass.B(Location.EuropeanLocations.Paris),
+        )
+    )
+    private val testState14: SealedGenericNestedClass<Location> = SealedGenericNestedClass.B(Location.EuropeanLocations.London)
 
     @Before
     fun setup() {
@@ -574,6 +607,133 @@ class PerSistaTest {
     }
 
     @Test
+    fun `when state is written with manually specified type, which contains a sealed class, state is read`() {
+
+        // arrange
+        val perSista = createPerSista(dataFolder.newFolder())
+        var firstReadResponse: StateContainingSealedClass? = null
+        var writeResponse: StateContainingSealedClass? = null
+        var readResponse: StateContainingSealedClass? = null
+
+        logger.i("starting")
+
+        // act
+        perSista.read(testState8, typeOf<StateContainingSealedClass>()) {
+            logger.i("first read response $it")
+            firstReadResponse = it
+        }
+        perSista.write(testState7, typeOf<StateContainingSealedClass>()) {
+            logger.i("write response: $it")
+            writeResponse = it
+        }
+        perSista.read(testState8, typeOf<StateContainingSealedClass>()) {
+            logger.i("read response $it")
+            readResponse = it
+        }
+
+        // assert
+        assertEquals(testState8, firstReadResponse)
+        assertEquals(testState7, writeResponse)
+        assertEquals(testState7, readResponse)
+    }
+
+    @Test
+    fun `when state is written with manually specified type, which is a generic nested data class, state is read`() {
+
+        // arrange
+        val perSista = createPerSista(dataFolder.newFolder())
+        var firstReadResponse: NestedDataClass<String>? = null
+        var writeResponse: NestedDataClass<String>? = null
+        var readResponse: NestedDataClass<String>? = null
+
+        logger.i("starting")
+
+        // act
+        perSista.read(testState10, typeOf<NestedDataClass<String>>()) {
+            logger.i("first read response $it")
+            firstReadResponse = it
+        }
+        perSista.write(testState9, typeOf<NestedDataClass<String>>()) {
+            logger.i("write response: $it")
+            writeResponse = it
+        }
+        perSista.read(testState10, typeOf<NestedDataClass<String>>()) {
+            logger.i("read response $it")
+            readResponse = it
+        }
+
+        // assert
+        assertNotEquals(testState10, testState9)
+        assertEquals(testState10, firstReadResponse)
+        assertEquals(testState9, writeResponse)
+        assertEquals(testState9, readResponse)
+    }
+
+    @Test
+    fun `when state is written with manually specified type, which is a generic sealed class, state is read`() {
+
+        // arrange
+        val perSista = createPerSista(dataFolder.newFolder())
+        var firstReadResponse: SealedGenericClass<Location>? = null
+        var writeResponse: SealedGenericClass<Location>? = null
+        var readResponse: SealedGenericClass<Location>? = null
+
+        logger.i("starting")
+
+        // act
+        perSista.read(testState12, typeOf<SealedGenericClass<Location>>()) {
+            logger.i("first read response $it")
+            firstReadResponse = it
+        }
+        perSista.write(testState11, typeOf<SealedGenericClass<Location>>()) {
+            logger.i("write response: $it")
+            writeResponse = it
+        }
+        perSista.read(testState12, typeOf<SealedGenericClass<Location>>()) {
+            logger.i("read response $it")
+            readResponse = it
+        }
+
+        // assert
+        assertNotEquals(testState11, testState12)
+        assertEquals(testState12, firstReadResponse)
+        assertEquals(testState11, writeResponse)
+        assertEquals(testState11, readResponse)
+    }
+
+    @Test
+    fun `when state is written with manually specified type, which is a generic sealed and nested class, state is read`() {
+
+        // arrange
+        val perSista = createPerSista(dataFolder.newFolder())
+        var firstReadResponse: SealedGenericNestedClass<Location>? = null
+        var writeResponse: SealedGenericNestedClass<Location>? = null
+        var readResponse: SealedGenericNestedClass<Location>? = null
+
+        logger.i("starting")
+
+        // act
+        perSista.read(testState14, typeOf<SealedGenericNestedClass<Location>>()) {
+            logger.i("first read response $it")
+            firstReadResponse = it
+        }
+        perSista.write(testState13, typeOf<SealedGenericNestedClass<Location>>()) {
+            logger.i("write response: $it")
+            writeResponse = it
+        }
+        perSista.read(testState14, typeOf<SealedGenericNestedClass<Location>>()) {
+            logger.i("read response $it")
+            readResponse = it
+        }
+
+        // assert
+        assertNotEquals(testState13, testState14)
+        assertEquals(testState14, firstReadResponse)
+        assertEquals(testState13, writeResponse)
+        assertEquals(testState13, readResponse)
+    }
+
+    @Test
     fun `when writing state with wrong type parameter, exception is thrown`() {
 
         // arrange
@@ -605,7 +765,7 @@ class PerSistaTest {
             mainDispatcher = testDispatcher,
             writeReadDispatcher = testDispatcher,
             logger = testLogger,
-            strictMode = strictMode
+            strictMode = strictMode,
         )
     }
 }

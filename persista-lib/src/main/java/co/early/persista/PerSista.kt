@@ -14,7 +14,7 @@ import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
 /**
- * Copyright © 2021-23 early.co. All rights reserved.
+ * Copyright © 2021-24 early.co. All rights reserved.
  */
 class PerSista(
     private val dataDirectory: File,
@@ -91,7 +91,7 @@ class PerSista(
                                 "plugin to gradle? did you remember to add proguard rules for " +
                                 "obfuscation? if you are using generics did you use the functions " +
                                 "that let you specify the KType? typeOf<MyClass>. See the sample " +
-                                "app in the PerSista repo)",
+                                "app and unit tests in the PerSista repo)",
                         e
                     )
                     if (strictMode) {
@@ -135,7 +135,7 @@ class PerSista(
                                         "plugin to gradle? did you remember to add PROGUARD rules for " +
                                         "obfuscation? if you are using generics did you use the functions " +
                                         "that let you specify the KType? typeOf<MyClass>. See the sample " +
-                                        "app in the PerSista repo)",
+                                        "app and unit tests in the PerSista repo)",
                                 e
                             )
                             if (strictMode) {
