@@ -14,7 +14,7 @@ import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
 /**
- * Copyright © 2021-23 early.co. All rights reserved.
+ * Copyright © 2021-24 early.co. All rights reserved.
  */
 class PerSista(
     private val dataDirectory: File,
@@ -54,7 +54,7 @@ class PerSista(
         }
     }
 
-    inline fun <reified T : Any> clear(klass: KClass<T>, crossinline complete: () -> Unit) {
+    inline fun <reified T : Any> clear(klass: KClass<out T>, crossinline complete: () -> Unit) {
         launchCustom(mainDispatcher) {
             clear(klass)
             complete()
@@ -85,15 +85,13 @@ class PerSista(
                     logger?.d(jsonText)
                     getKeyFile(klass)?.writeText(jsonText, Charsets.UTF_8)
                     item
-                } catch (cce: ClassCastException){
-                    logger?.e("Usage: write(\"myString\", typeOf<String>()) Wrong type specified, must " +
-                             "be typeOf<T>, not typeOf<${type.classifier}>")
-                    throw cce
                 } catch (e: Exception) {
                     logger?.e(
                         "write failed (did you remember to add the kotlin serialization " +
                                 "plugin to gradle? did you remember to add proguard rules for " +
-                                "obfuscation? see the sample app in the PerSista repo)",
+                                "obfuscation? if you are using generics did you use the functions " +
+                                "that let you specify the KType? typeOf<MyClass>. See the sample " +
+                                "app and unit tests in the PerSista repo)",
                         e
                     )
                     if (strictMode) {
@@ -135,7 +133,9 @@ class PerSista(
                             logger?.e(
                                 "read failed (did you remember to add the kotlin serialization " +
                                         "plugin to gradle? did you remember to add PROGUARD rules for " +
-                                        "obfuscation? see the sample app in the PerSista repo)",
+                                        "obfuscation? if you are using generics did you use the functions " +
+                                        "that let you specify the KType? typeOf<MyClass>. See the sample " +
+                                        "app and unit tests in the PerSista repo)",
                                 e
                             )
                             if (strictMode) {
@@ -149,7 +149,7 @@ class PerSista(
         }
     }
 
-    suspend inline fun <reified T : Any> clear(klass: KClass<T>) {
+    suspend inline fun <reified T : Any> clear(klass: KClass<out T>) {
         val qualifiedName = getQualifiedName(klass, strictMode, logger) ?: return
         awaitCustom(writeReadDispatcher) {
             qualifiedName.let { className ->
