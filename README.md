@@ -149,7 +149,7 @@ The non-suspend APIs invoke a functional parameter when they are complete, if yo
 
 ## License
 
-    Copyright 2015-2023 early.co
+    Copyright 2015-2024 early.co
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
