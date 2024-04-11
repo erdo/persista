@@ -41,6 +41,7 @@ Copy the PerSista.kt class into your own app and edit as appropriate, or add thi
 ```
 implementation("co.early.persista:persista:1.5.3")
 ```
+The GPG fingerprint used to sign the maven packages is: <strong>5B83EC7248CCAEED24076AF87D1CC9121D51BA24</strong> see repo root for the GPG public certificate.
 
 ## How to use it
 
