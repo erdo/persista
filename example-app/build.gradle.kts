@@ -46,7 +46,7 @@ android {
         }
         getByName("release") {
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "../proguard-example-app.pro")
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-example-app.pro")
             signingConfig = signingConfigs.getByName("release")
         }
     }
@@ -58,10 +58,10 @@ android {
 
 dependencies {
 
-    implementation(project(":persista-lib"))
-    //implementation("co.early.persista:persista:1.4.0")
+    implementation(project(":persista"))
+    //implementation("co.early.persista:persista:2.0.0-rc.1")
 
-    implementation("co.early.fore:fore-kt-android:1.6.1")
+    implementation("co.early.fore:fore-core:2.0.0-rc.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
