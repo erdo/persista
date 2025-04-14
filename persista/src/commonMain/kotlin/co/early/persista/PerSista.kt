@@ -27,6 +27,11 @@ class PerSista(
     @PublishedApi internal val json: Json = Json,
 ) {
 
+    // this is for iOS target benefit which doesn't like default parameters in constructors
+    constructor(dataPath: Path) : this(dataPath, Dispatchers.Main, Dispatchers.IO, null, false, Json)
+    constructor(dataPath: Path, logger: Logger) : this(dataPath, Dispatchers.Main, Dispatchers.IO, logger, false, Json)
+    constructor(dataPath: Path, logger: Logger, json: Json) : this(dataPath, Dispatchers.Main, Dispatchers.IO, logger, false, json)
+
     private val writeReadMutex = Mutex()
 
     init {
@@ -136,8 +141,10 @@ class PerSista(
             } catch (e: Exception) {
                 when (e) {
                     is FileNotFoundException -> {
-                        logger?.e(
-                            "file not found, maybe it was never written? or " +
+                        logger?.w(
+                            "file not found, maybe it was never written? (if that's " +
+                                    "expected - for example it's the first time you run this app, " +
+                                    "you can ignore this warning) or " +
                                     "if you are manually specifying the type, maybe you have " +
                                     "specified the wrong type (usage: read(\"myString\", typeOf<String>())",
                             e
