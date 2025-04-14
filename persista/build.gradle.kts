@@ -58,7 +58,7 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(libs.kotlin.test)
-                implementation(project(":persista-test-fixtures"))
+                implementation(libs.fore.test.fixtures)
             }
         }
     }

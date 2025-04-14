@@ -25,5 +25,4 @@ dependencyResolutionManagement {
 
 include(":example-app")
 include(":persista")
-include(":persista-test-fixtures")
 rootProject.name = "persista"

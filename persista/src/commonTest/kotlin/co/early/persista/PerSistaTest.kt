@@ -1,9 +1,9 @@
 package co.early.persista
 
+import MockLogger
 import co.early.fore.core.delegate.Fore
 import co.early.fore.core.delegate.TestDelegateDefault
 import co.early.fore.core.logging.Logger
-import co.early.fore.core.logging.MockLogger
 import co.early.fore.core.logging.SystemLogger
 import co.early.persista.TestState.*
 import kotlinx.coroutines.*
@@ -367,7 +367,7 @@ class PerSistaTest {
     }
 
     @Test
-    fun `given strict mode true - when state is not written - error is logged on read`() {
+    fun `given strict mode true - when state is not written - warning is logged on read`() {
 
         // arrange
         val perSista = createPerSista(dataFolder, true, mockLogger)
@@ -382,7 +382,7 @@ class PerSistaTest {
 
         // assert
         assertEquals(2, mockLogger.callHistory.size)
-        assertEquals(MockLogger.Level.E, mockLogger.callHistory[1].level)
+        assertEquals(MockLogger.Level.W, mockLogger.callHistory[1].level)
         assertNotNull("should have message", mockLogger.callHistory[1].message)
         assertNotNull("should have throwable", mockLogger.callHistory[1].throwable)
         assertEquals(testState1, readResponse)
