@@ -1,7 +1,8 @@
 [versions]
 agp = "8.3.2"
 kotlin = "2.0.20"
-jvm-toolchain = "8"
+jvm-toolchain = "21"
+jvm-target = "1.8"
 
 [libraries]
 fore-core = "co.early.fore:fore-core:2.0.0-rc.1"
