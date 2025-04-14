@@ -1,22 +1,24 @@
 [versions]
-agp = "8.3.2"
-kotlin = "2.0.20"
+androidPluginVersion = "8.3.2"
+kotlinVersion = "2.1.10"
 jvm-toolchain = "21"
 jvm-target = "1.8"
 
 [libraries]
-fore-core = "co.early.fore:fore-core:2.0.0-rc.1"
-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+fore-core = "co.early.fore:fore-core:2.0.0-rc.3"
+fore-test-fixtures = "co.early.fore:fore-test-fixtures:2.0.0-rc.3"
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlinVersion" }
 kotlinx-coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0"
 kotlin-serialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3"
 okio = "com.squareup.okio:okio:3.9.1"
 
 [plugins]
-androidApplication = { id = "com.android.application", version.ref = "agp" }
-androidLibrary = { id = "com.android.library", version.ref = "agp" }
-kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
-dokka = "org.jetbrains.dokka:2.0.0"
+androidAppPlugin = { id = "com.android.application", version.ref = "androidPluginVersion" }
+androidLibraryPlugin = { id = "com.android.library", version.ref = "androidPluginVersion" }
+kotlinAndroidPlugin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinVersion" }
+kotlinJvmPlugin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinVersion" }
+kotlinMultiPlatformPlugin = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlinVersion" }
+kotlinKaptPlugin = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlinVersion" }
+kotlinSerializationPlugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinVersion" }
+kotlinCocoapodsPlugin = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlinVersion" }
+dokkaPlugin = "org.jetbrains.dokka:2.0.0"

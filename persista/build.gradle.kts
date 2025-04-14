@@ -1,12 +1,13 @@
 import co.early.persista.Shared
 import co.early.persista.applyPublishingConfig
 import org.gradle.jvm.tasks.Jar
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.dokka)
-    alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.kotlinMultiPlatformPlugin)
+    alias(libs.plugins.androidLibraryPlugin)
+    alias(libs.plugins.dokkaPlugin)
+    alias(libs.plugins.kotlinSerializationPlugin)
     id("maven-publish")
     id("signing")
 }
@@ -109,14 +110,12 @@ android {
     }
 }
 
-
 ext.apply {
     set("LIB_ARTIFACT_ID", "persista")
     set("LIB_DESCRIPTION", "persist single instances of kotlin data classes")
 }
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
-
 
 val javadocJar by tasks.registering(Jar::class) {
     archiveClassifier.set("javadoc")
