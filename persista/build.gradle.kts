@@ -76,7 +76,7 @@ kotlin {
 
 android {
 
-    namespace = "co.early.fore.kt"
+    namespace = "co.early.persista"
 
     compileSdk = Shared.Android.compileSdk
 
