@@ -14,7 +14,7 @@ object Shared {
 
     object Publish {
 
-        const val LIB_VERSION_NAME = "2.0.0-rc.2" //"x.x.x-SNAPSHOT"
+        const val LIB_VERSION_NAME = "2.0.0" //"x.x.x-SNAPSHOT"
         const val LIB_VERSION_CODE = 17
 
         const val LIB_GROUP = "co.early.persista"
