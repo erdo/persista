@@ -1,15 +1,9 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        google()
-    }
-    dependencies {
-        classpath("com.android.tools.build:gradle:8.3.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22")
-        classpath("org.jetbrains.kotlin:kotlin-serialization:1.9.22")
-    }
-}
-
-tasks.register("clean", Delete::class){
-    delete(rootProject.layout.buildDirectory)
+plugins {
+    alias(libs.plugins.androidAppPlugin).apply(false)
+    alias(libs.plugins.androidLibraryPlugin).apply(false)
+    alias(libs.plugins.kotlinAndroidPlugin).apply(false)
+    alias(libs.plugins.kotlinJvmPlugin).apply(false)
+    alias(libs.plugins.kotlinMultiPlatformPlugin).apply(false)
+    alias(libs.plugins.kotlinSerializationPlugin).apply(false)
+    alias(libs.plugins.kotlinCocoapodsPlugin).apply(false)
 }

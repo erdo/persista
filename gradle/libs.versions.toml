@@ -1,0 +1,25 @@
+[versions]
+androidPluginVersion = "8.3.2"
+kotlinVersion = "2.1.10"
+foreVersion = "2.0.0"
+jvm-toolchain = "21"
+jvm-target = "1.8"
+
+[libraries]
+fore-core = { module = "co.early.fore:fore-core", version.ref = "foreVersion" }
+fore-test-fixtures = { module = "co.early.fore:fore-test-fixtures", version.ref = "foreVersion" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlinVersion" }
+kotlinx-coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1"
+kotlin-serialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0"
+okio = "com.squareup.okio:okio:3.10.2"
+
+[plugins]
+androidAppPlugin = { id = "com.android.application", version.ref = "androidPluginVersion" }
+androidLibraryPlugin = { id = "com.android.library", version.ref = "androidPluginVersion" }
+kotlinAndroidPlugin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinVersion" }
+kotlinJvmPlugin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinVersion" }
+kotlinMultiPlatformPlugin = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlinVersion" }
+kotlinKaptPlugin = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlinVersion" }
+kotlinSerializationPlugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinVersion" }
+kotlinCocoapodsPlugin = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlinVersion" }
+dokkaPlugin = "org.jetbrains.dokka:2.0.0"

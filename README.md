@@ -1,8 +1,8 @@
-# PerSista
+# PerSista KMP
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/persista/blob/main/LICENSE.txt)
 
-![central-1.5.4](https://img.shields.io/badge/central-1.5.4-green.svg)
+![central-2.0.0](https://img.shields.io/badge/central-2.0.0-green.svg)
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg)
 
@@ -10,7 +10,7 @@
 
 <br/>
 
-Small library for persisting _single instances_ of kotlin data classes. It's particularly useful as a way to asynchronously persist immutable state.
+Small cross platform library for persisting _single instances_ of kotlin data classes. It's particularly useful as a way to asynchronously persist immutable state.
 
 ```
 val state = DashboardState(dashboardId = 777, userName = "erdo")
@@ -36,10 +36,10 @@ perSista.read(default = state){ readState ->  }
 
 ## How to get it
 
-Copy the PerSista.kt class into your own app and edit as appropriate, or add this gradle line to your project (you'll need mavenCentral() in your list of maven repos)
+Add this gradle line to your project (you'll need mavenCentral() in your list of maven repos)
 
 ```
-implementation("co.early.persista:persista:1.5.4")
+implementation("co.early.persista:persista:2.0.0")
 ```
 The GPG fingerprint used to sign the maven packages is: <strong>5B83EC7248CCAEED24076AF87D1CC9121D51BA24</strong> see repo root for the GPG public certificate.
 

@@ -24,5 +24,5 @@ dependencyResolutionManagement {
 }
 
 include(":example-app")
-include(":persista-lib")
+include(":persista")
 rootProject.name = "persista"
