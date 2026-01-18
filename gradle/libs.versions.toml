@@ -1,7 +1,7 @@
 [versions]
 androidPluginVersion = "8.3.2"
 kotlinVersion = "2.1.10"
-foreVersion = "2.0.0"
+foreVersion = "2.0.1"
 jvm-toolchain = "21"
 jvm-target = "1.8"
 

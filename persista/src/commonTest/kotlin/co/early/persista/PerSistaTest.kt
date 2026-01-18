@@ -1,23 +1,33 @@
 package co.early.persista
 
 import MockLogger
+import co.early.fore.core.delegate.DelegateTestSynchronous
 import co.early.fore.core.delegate.Fore
-import co.early.fore.core.delegate.TestDelegateDefault
 import co.early.fore.core.logging.Logger
 import co.early.fore.core.logging.SystemLogger
-import co.early.persista.TestState.*
-import kotlinx.coroutines.*
+import co.early.persista.TestState.DashboardState
+import co.early.persista.TestState.Driver
+import co.early.persista.TestState.Error
+import co.early.persista.TestState.Location
+import co.early.persista.TestState.MoreState
+import co.early.persista.TestState.NestedDataClass
+import co.early.persista.TestState.SealedGenericClass
+import co.early.persista.TestState.SealedGenericNestedClass
+import co.early.persista.TestState.SomethingElseState
+import co.early.persista.TestState.StateContainingSealedClass
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.SerializationException
 import okio.Path
 import okio.Path.Companion.toPath
 import okio.SYSTEM
+import kotlin.reflect.typeOf
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.DefaultAsserter.assertNotNull
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
-
-import kotlin.reflect.typeOf
-import kotlin.test.BeforeTest
-import kotlin.test.DefaultAsserter.assertNotNull
 import kotlin.test.assertTrue
 
 class PerSistaTest {
@@ -26,11 +36,23 @@ class PerSistaTest {
     private val logger = SystemLogger()
     private val mockLogger = MockLogger()
 
+    private lateinit var delegate: DelegateTestSynchronous
+
     @BeforeTest
     fun setup() {
-        Fore.setDelegate(TestDelegateDefault())
+
         okio.FileSystem.SYSTEM.deleteRecursively(dataFolder)
         mockLogger.clear()
+
+        // make the code run synchronously, reroute Log.x to
+        // System.out.println() so we see it in the test log
+        delegate = DelegateTestSynchronous()
+        Fore.setDelegate(delegate)
+    }
+
+    @AfterTest
+    fun cleanup() {
+        delegate.cleanup()
     }
 
     @Test
@@ -687,21 +709,21 @@ class PerSistaTest {
 
         // arrange
         val perSista = createPerSista(dataFolder, true)
-        var exception: Exception? = null
+
+        var throwable: Throwable? = null
+        val delegate = DelegateTestSynchronous(exceptionHandler = CoroutineExceptionHandler { _, t -> throwable = t })
+        Fore.setDelegate(delegate)
 
         logger.i("starting")
 
         // act
-        try {
-            perSista.write(testState4NonSerializable, typeOf<Driver>()) {
-                logger.i("write response: $it")
-            }
-        } catch (e: Exception) {
-            exception = e
+        perSista.write(testState4NonSerializable, typeOf<Driver>()) {
+            logger.i("write response: $it")
         }
 
         // assert
-        assertTrue(exception is ClassCastException, "expected ClassCastException, got $exception")
+        assertTrue(throwable is ClassCastException, "expected ClassCastException, got $throwable")
+        delegate.cleanup()
     }
 
     private fun createPerSista(

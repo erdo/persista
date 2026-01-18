@@ -30,9 +30,14 @@ object Shared {
         const val LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
     }
 
+    private fun findSecretsFile(relativePaths: String): File {
+        // This assumes the secrets are relative to the root of the project
+        return File(System.getProperty("user.dir")).resolve(relativePaths)
+    }
+
     object Secrets {
 
-        private val secrets = readProperties(File("../secrets/secrets.properties"))
+        private val secrets = readProperties(findSecretsFile("../secrets/secrets.properties"))
 
         val MAVEN_USER = (getenv("MAVEN_USER") ?: secrets.getProperty("MAVEN_USER")) ?: "MISSING"
         val MAVEN_PASSWORD = (getenv("MAVEN_PASSWORD") ?: secrets.getProperty("MAVEN_PASSWORD")) ?: "MISSING"
