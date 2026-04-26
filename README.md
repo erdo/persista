@@ -2,11 +2,22 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/persista/blob/main/LICENSE.txt)
 
-![central-2.0.0](https://img.shields.io/badge/central-2.0.0-green.svg)
+![central-2.1.0](https://img.shields.io/badge/central-2.1.0-green.svg)
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg)
 
 [![circleci](https://circleci.com/gh/erdo/persista/tree/main.svg?style=shield)](https://circleci.com/gh/erdo/persista/tree/main)
+
+<br/>
+
+![kmp-jvm](https://img.shields.io/badge/KMP-jvm-7f52ff.svg){: .float-left}
+![kmp-ios](https://img.shields.io/badge/KMP-ios-7f52ff.svg){: .float-left}
+![kmp-macos](https://img.shields.io/badge/KMP-macos-7f52ff.svg){: .float-left}
+![kmp-watchos](https://img.shields.io/badge/KMP-watchos-7f52ff.svg){: .float-left}
+![kmp-tvos](https://img.shields.io/badge/KMP-tvos-7f52ff.svg){: .float-left}
+![kmp-linux](https://img.shields.io/badge/KMP-linux-7f52ff.svg){: .float-left}
+![kmp-windows](https://img.shields.io/badge/KMP-windows-7f52ff.svg){: .float-left}
+
 
 <br/>
 
@@ -39,7 +50,7 @@ perSista.read(default = state){ readState ->  }
 Add this gradle line to your project (you'll need mavenCentral() in your list of maven repos)
 
 ```
-implementation("co.early.persista:persista:2.0.0")
+implementation("co.early.persista:persista:2.1.0")
 ```
 The GPG fingerprint used to sign the maven packages is: <strong>5B83EC7248CCAEED24076AF87D1CC9121D51BA24</strong> see repo root for the GPG public certificate.
 
