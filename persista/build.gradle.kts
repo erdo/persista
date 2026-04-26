@@ -2,6 +2,7 @@ import co.early.persista.Shared
 import co.early.persista.applyPublishingConfig
 import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
     alias(libs.plugins.kotlinMultiPlatformPlugin)
@@ -16,6 +17,11 @@ kotlin {
 
     jvmToolchain {
         languageVersion.set(JavaLanguageVersion.of(libs.versions.jvm.toolchain.get().toInt()))
+    }
+
+    compilerOptions {
+        languageVersion.set(KotlinVersion.fromVersion(libs.versions.kotlin.floor.get()))
+        apiVersion.set(KotlinVersion.fromVersion(libs.versions.kotlin.floor.get()))
     }
 
     targets.withType<org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget> {
@@ -34,26 +40,23 @@ kotlin {
 
     jvm()
 
-    iosArm64()
-    iosX64()
-    iosSimulatorArm64()
-
-    macosX64()
+    // Tier 1
     macosArm64()
+    iosSimulatorArm64()
+    iosArm64()
 
-    watchosArm32()
-    watchosArm64()
-    watchosX64()
-    watchosSimulatorArm64()
-
-    tvosArm64()
-    tvosX64()
-    tvosSimulatorArm64()
-
+    // Tier 2
     linuxX64()
     linuxArm64()
+    watchosSimulatorArm64()
+    watchosArm32()
+    watchosArm64()
+    tvosSimulatorArm64()
+    tvosArm64()
 
+    // Tier 3
     mingwX64()
+    iosX64()
 
     sourceSets {
 
@@ -132,7 +135,7 @@ println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 val javadocJar by tasks.registering(Jar::class) {
     archiveClassifier.set("javadoc")
-    from(tasks.dokkaHtml)
+    from(tasks.named("dokkaGenerateHtml"))
 }
 
 applyPublishingConfig()

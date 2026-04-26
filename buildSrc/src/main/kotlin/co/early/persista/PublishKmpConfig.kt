@@ -15,6 +15,7 @@ fun Project.applyPublishingConfig() {
 
     apply(plugin = "maven-publish")
     apply(plugin = "signing")
+    apply(plugin = "com.gradleup.nmcp")
 
     val LIB_ARTIFACT_ID: String? by project
     val LIB_DESCRIPTION: String? by project
@@ -70,25 +71,6 @@ fun Project.applyPublishingConfig() {
                 }
             }
 
-            repositories {
-                maven {
-                    name = "mavenCentral"
-
-                    val releasesRepoUrl =
-                        "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-                    val snapshotsRepoUrl =
-                        "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-                    val repoUrl =
-                        if (Shared.Publish.LIB_VERSION_NAME.endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
-
-                    url = URI(repoUrl)
-
-                    credentials {
-                        username = Shared.Secrets.MAVEN_USER
-                        password = Shared.Secrets.MAVEN_PASSWORD
-                    }
-                }
-            }
         }
     }
 

@@ -1,13 +1,19 @@
 package co.early.persista
 
 import co.early.fore.core.coroutine.awaitCustom
+import co.early.fore.core.coroutine.awaitIO
 import co.early.fore.core.coroutine.launchCustom
+import co.early.fore.core.coroutine.launchIO
+import co.early.fore.core.coroutine.launchMain
+import co.early.fore.core.delegate.Fore
 import co.early.fore.core.logging.Logger
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
+import okio.ByteString
+import okio.ByteString.Companion.encodeUtf8
 import okio.FileNotFoundException
 import okio.Path
 import okio.SYSTEM
@@ -20,57 +26,63 @@ import kotlin.reflect.typeOf
  */
 class PerSista(
     private val dataPath: Path,
-    @PublishedApi internal val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
-    @PublishedApi internal val writeReadDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    @PublishedApi internal val encryptor: Encryptor? = null,
     @PublishedApi internal val logger: Logger? = null,
     @PublishedApi internal val strictMode: Boolean = false,
     @PublishedApi internal val json: Json = Json,
 ) {
 
     // this is for iOS target benefit which doesn't like default parameters in constructors
-    constructor(dataPath: Path) : this(dataPath, Dispatchers.Main, Dispatchers.IO, null, false, Json)
-    constructor(dataPath: Path, logger: Logger) : this(dataPath, Dispatchers.Main, Dispatchers.IO, logger, false, Json)
-    constructor(dataPath: Path, logger: Logger, json: Json) : this(dataPath, Dispatchers.Main, Dispatchers.IO, logger, false, json)
+    constructor(dataPath: Path) : this(dataPath, null, null, false, Json)
+    constructor(dataPath: Path, logger: Logger) : this(dataPath, null, logger, false, Json)
+    constructor(dataPath: Path, logger: Logger, json: Json) : this(dataPath, null, logger, false, json)
+    constructor(dataPath: Path, encryptor: Encryptor) : this(dataPath, encryptor, null, false, Json)
+    constructor(dataPath: Path, encryptor: Encryptor, logger: Logger) : this(dataPath, encryptor, logger, false, Json)
+    constructor(dataPath: Path, encryptor: Encryptor, logger: Logger, json: Json) : this(dataPath, encryptor, logger, false, json)
 
     private val writeReadMutex = Mutex()
 
     init {
-        okio.FileSystem.SYSTEM.createDirectories(getPersistaFolder())
+        launchIO {
+            writeReadMutex.withLock {
+                okio.FileSystem.SYSTEM.createDirectories(getPersistaFolder())
+            }
+        }
     }
 
     inline fun <reified T : Any> write(item: T, crossinline complete: (T) -> Unit) {
-        launchCustom(mainDispatcher) {
+        launchMain {
             complete(write(item, typeOf<T>()))
         }
     }
 
     fun <T : Any> write(item: T, type: KType, complete: (T) -> Unit) {
-        launchCustom(mainDispatcher) {
+        launchMain {
             complete(write(item, type))
         }
     }
 
     inline fun <reified T : Any> read(default: T, crossinline complete: (T) -> Unit) {
-        launchCustom(mainDispatcher) {
+        launchMain {
             complete(read(default, typeOf<T>()))
         }
     }
 
     fun <T : Any> read(default: T, type: KType, complete: (T) -> Unit) {
-        launchCustom(mainDispatcher) {
+        launchMain {
             complete(read(default, type))
         }
     }
 
     inline fun <reified T : Any> clear(klass: KClass<out T>, crossinline complete: () -> Unit) {
-        launchCustom(mainDispatcher) {
+        launchMain {
             clear(klass)
             complete()
         }
     }
 
     fun wipeEverything(complete: () -> Unit) {
-        launchCustom(mainDispatcher) {
+        launchMain {
             wipeEverything()
             complete()
         }
@@ -84,16 +96,16 @@ class PerSista(
         @Suppress("UNCHECKED_CAST")
         val klass = type.classifier as KClass<T>
         val qualifiedName = getQualifiedName(klass, strictMode, logger) ?: return item
-        return awaitCustom(writeReadDispatcher) {
+        return awaitIO {
             try {
                 val serializer = serializer(type)
                 val jsonText = json.encodeToString(serializer, item)
-                logger?.d("WRITING to $qualifiedName")
-                logger?.d(jsonText)
+                logger?.d("PerSista WRITING to $qualifiedName")
+                logger?.v(jsonText)
                 getKeyFile(klass)?.let { path ->
                     writeReadMutex.withLock {
                         okio.FileSystem.SYSTEM.write(path) {
-                            writeUtf8(jsonText)
+                            writeUtf8(encryptor?.encrypt(jsonText) ?: jsonText)
                         }
                     }
                 }
@@ -124,15 +136,16 @@ class PerSista(
         @Suppress("UNCHECKED_CAST")
         val klass = type.classifier as KClass<T>
         val qualifiedName = getQualifiedName(klass, strictMode, logger) ?: return default
-        return awaitCustom(writeReadDispatcher) {
+        return awaitIO {
             try {
                 val serializer = serializer(type)
-                logger?.d("READING from $qualifiedName")
+                logger?.d("PerSista READING from $qualifiedName")
                 getKeyFile(klass)?.let { path ->
                     writeReadMutex.withLock {
                         okio.FileSystem.SYSTEM.read(path) {
-                            val jsonText = readUtf8()
-                            logger?.d(jsonText)
+                            val cipherText = readUtf8()
+                            val jsonText = encryptor?.decrypt(cipherText) ?: cipherText
+                            logger?.v(jsonText)
                             @Suppress("UNCHECKED_CAST")
                             json.decodeFromString(serializer, jsonText) as T
                         }
@@ -172,9 +185,9 @@ class PerSista(
 
     suspend fun <T : Any> clear(klass: KClass<out T>) {
         val qualifiedName = getQualifiedName(klass, strictMode, logger) ?: return
-        awaitCustom(writeReadDispatcher) {
+        awaitIO {
             try {
-                logger?.d("CLEARING $qualifiedName")
+                logger?.d("PerSista CLEARING $qualifiedName")
                 getKeyFile(klass)?.let { path ->
                     writeReadMutex.withLock {
                         okio.FileSystem.SYSTEM.delete(path)
@@ -192,8 +205,8 @@ class PerSista(
     }
 
     suspend fun wipeEverything() {
-        logger?.d("wipeEverything()")
-        awaitCustom(writeReadDispatcher) {
+        logger?.d("PerSista wipeEverything()")
+        awaitIO {
             getPersistaFolder().let {
                 writeReadMutex.withLock {
                     okio.FileSystem.SYSTEM.deleteRecursively(it)
@@ -233,4 +246,9 @@ class PerSista(
     private fun getPersistaFolder(): Path {
         return dataPath / "persista"
     }
+}
+
+interface Encryptor {
+    fun encrypt(plainText: String): String
+    fun decrypt(base64CipherText: String): String?
 }

@@ -13,10 +13,7 @@ object Shared {
     }
 
     object Publish {
-
-        const val LIB_VERSION_NAME = "2.0.0" //"x.x.x-SNAPSHOT"
-        const val LIB_VERSION_CODE = 17
-
+        const val LIB_VERSION_NAME = "2.1.0" //"x.x.x-SNAPSHOT"
         const val LIB_GROUP = "co.early.persista"
         const val PROJ_NAME = "persista"
         const val LIB_DEVELOPER_ID = "erdo"
@@ -25,14 +22,18 @@ object Shared {
         const val POM_URL = "https://github.com/erdo/persista/"
         const val POM_SCM_URL = "https://github.com/erdo/persista/"
         const val POM_SCM_CONNECTION = "scm:git@github.com:erdo/persista.git"
-        const val LICENCE_SHORT_NAME = "Apache-2.0"
         const val LICENCE_NAME = "The Apache Software License, Version 2.0"
         const val LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
     }
 
+    private fun findSecretsFile(relativePaths: String): File {
+        // This assumes the secrets are relative to the root of the project
+        return File(System.getProperty("user.dir")).resolve(relativePaths)
+    }
+
     object Secrets {
 
-        private val secrets = readProperties(File("../secrets/secrets.properties"))
+        private val secrets = readProperties(findSecretsFile("../secrets/secrets.properties"))
 
         val MAVEN_USER = (getenv("MAVEN_USER") ?: secrets.getProperty("MAVEN_USER")) ?: "MISSING"
         val MAVEN_PASSWORD = (getenv("MAVEN_PASSWORD") ?: secrets.getProperty("MAVEN_PASSWORD")) ?: "MISSING"
