@@ -2,6 +2,7 @@ import co.early.persista.Shared
 import co.early.persista.applyPublishingConfig
 import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
     alias(libs.plugins.kotlinMultiPlatformPlugin)
@@ -16,6 +17,11 @@ kotlin {
 
     jvmToolchain {
         languageVersion.set(JavaLanguageVersion.of(libs.versions.jvm.toolchain.get().toInt()))
+    }
+
+    compilerOptions {
+        languageVersion.set(KotlinVersion.fromVersion(libs.versions.kotlin.floor.get()))
+        apiVersion.set(KotlinVersion.fromVersion(libs.versions.kotlin.floor.get()))
     }
 
     targets.withType<org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget> {
